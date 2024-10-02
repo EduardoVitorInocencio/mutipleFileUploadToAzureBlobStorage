@@ -38,33 +38,33 @@ Before running the project, ensure you have the following installed:
 
 1. Clone the repository:
 
-\`\`\`bash
+```bash
 git clone <repository-url>
 cd <repository-folder>
-\`\`\`
+```
 
 2. Install the required dependencies:
 
-\`\`\`bash
+```bash
 pip install -r requirements.txt
-\`\`\`
+```
 
 3. Add your Azure Blob Storage connection string to **Streamlit secrets**:
 
 - Open the `.streamlit/secrets.toml` file and add your Azure connection string under the following format:
 
-\`\`\`toml
+```toml
 [azure]
 connection_string = "your-azure-connection-string"
-\`\`\`
+```
 
 ## Usage
 
 1. Run the Streamlit app:
 
-\`\`\`bash
+```bash
 streamlit run app.py
-\`\`\`
+```
 
 2. Upload multiple images through the interface. The images will be displayed for preview and uploaded to Azure Blob Storage after confirmation.
 
