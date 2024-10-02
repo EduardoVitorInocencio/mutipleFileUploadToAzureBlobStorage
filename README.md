@@ -1,148 +1,83 @@
 
-# Multiple File Uploads App - Streamlit
+# Streamlit Multiple File Upload with Azure Blob Storage
 
-Welcome to the **Multiple File Uploads App** built using Streamlit. This application allows users to upload multiple image files and preview them directly in the app, with the option to save them locally. 
-
-This README will guide you through the steps of cloning, running the app, and understanding how it works.
+This project is a simple web application built using **Streamlit** for uploading multiple image files and saving them directly to **Azure Blob Storage**. The application allows users to select multiple images, preview them, and upload the images to the cloud with a single click.
 
 ## Table of Contents
-1. [Project Overview](#project-overview)
-2. [Features](#features)
-3. [Requirements](#requirements)
-4. [Installation](#installation)
-5. [How to Run the Application](#how-to-run-the-application)
-6. [Code Walkthrough](#code-walkthrough)
-7. [Contributing](#contributing)
-8. [License](#license)
 
-## Project Overview
-
-This project demonstrates how to build a simple app using Streamlit where users can:
-- Upload multiple image files (PNG, JPG, JPEG)
-- Preview the uploaded images within the app
-- Save uploaded images to a local directory (`tempDir`)
+- [Features](#features)
+- [Technologies Used](#technologies-used)
+- [Setup Instructions](#setup-instructions)
+- [Usage](#usage)
+- [Azure Blob Storage Configuration](#azure-blob-storage-configuration)
+- [License](#license)
 
 ## Features
 
-- **Multiple File Uploads**: Supports multiple image uploads simultaneously.
-- **Image Preview**: Displays the uploaded images in real-time within the app.
-- **File Storage**: Saves the uploaded files in a local directory.
+- Upload multiple images simultaneously (.png, .jpg, .jpeg).
+- Preview images before uploading.
+- Store uploaded images directly in Azure Blob Storage.
+- Simple and user-friendly interface with Streamlit.
 
-## Requirements
+## Technologies Used
 
-Before running the app, make sure you have the following installed:
-- Python 3.7+
-- Streamlit
-- PIL (Python Imaging Library) for image processing
+- **Streamlit**: A Python library for building web applications quickly and easily.
+- **Azure Blob Storage**: Cloud storage service for saving the uploaded images.
+- **Pillow (PIL)**: Image processing library used to handle and display images.
 
-## Installation
+## Setup Instructions
 
-1. **Clone the Repository**
+### Prerequisites
 
-   To clone the repository, open your terminal and run:
+Before running the project, ensure you have the following installed:
 
-   ```bash
-   git clone https://github.com/your-username/multiple-file-uploads-app.git
-   ```
+- Python 3.8 or higher
+- Azure account (to set up Blob Storage)
 
-2. **Navigate to the Project Directory**
+### Installation
 
-   ```bash
-   cd multiple-file-uploads-app
-   ```
+1. Clone the repository:
 
-3. **Install the Required Dependencies**
+\`\`\`bash
+git clone <repository-url>
+cd <repository-folder>
+\`\`\`
 
-   You can install the dependencies listed in the `requirements.txt` file by running:
+2. Install the required dependencies:
 
-   ```bash
-   pip install -r requirements.txt
-   ```
+\`\`\`bash
+pip install -r requirements.txt
+\`\`\`
 
-   Alternatively, install the required libraries manually:
+3. Add your Azure Blob Storage connection string to **Streamlit secrets**:
 
-   ```bash
-   pip install streamlit pillow
-   ```
+- Open the `.streamlit/secrets.toml` file and add your Azure connection string under the following format:
 
-## How to Run the Application
+\`\`\`toml
+[azure]
+connection_string = "your-azure-connection-string"
+\`\`\`
 
-After cloning the repository and installing the required packages, you can start the Streamlit app by running:
+## Usage
 
-```bash
+1. Run the Streamlit app:
+
+\`\`\`bash
 streamlit run app.py
-```
+\`\`\`
 
-Once the app is running, open your browser and go to `http://localhost:8501`.
+2. Upload multiple images through the interface. The images will be displayed for preview and uploaded to Azure Blob Storage after confirmation.
 
-## Code Walkthrough
+## Azure Blob Storage Configuration
 
-### 1. **File Uploads and Image Handling**
+Make sure you have an Azure Blob Storage account and a container created:
 
-```python
-import streamlit as st
-import os
-from PIL import Image
-```
-- The necessary libraries are imported. We use **Streamlit** to build the web interface, **PIL** (Pillow) for image processing, and **os** to handle file operations.
+1. Log into [Azure Portal](https://portal.azure.com/).
+2. Create a new Storage Account.
+3. Inside the Storage Account, create a Blob Container (you can use the container name `teste` as mentioned in the code).
 
-### 2. **Cache and Load Images**
-
-```python
-@st.cache_data
-def load_image(imagefile):
-    img = Image.open(imagefile)
-    return img
-```
-- The `load_image` function reads and opens the image using `PIL`. It uses the `@st.cache_data` decorator to improve performance by caching the images.
-
-### 3. **Saving Uploaded Files Locally**
-
-```python
-def save_uploaded_file(uploaded_file):
-    with open(os.path.join("tempDir", uploaded_file.name), "wb") as f:
-        f.write(uploaded_file.getbuffer())
-    return st.success(f"Saved {uploaded_file.name} to tempDir")
-```
-- This function saves the uploaded files to a local directory called `tempDir`. If the directory doesn't exist, make sure to create it before running the app.
-
-### 4. **Building the Streamlit App**
-
-```python
-st.title("Multiple file uploads App")
-menu = ["Home", "About"]
-choice = st.sidebar.selectbox("Menu", menu)
-```
-- The app has two sections: "Home" and "About". Users can navigate using the sidebar menu.
-
-### 5. **Main Functionality (Home Page)**
-
-```python
-if choice == "Home":
-    st.subheader("Upload Multiple Files")
-    uploaded_files = st.file_uploader("Upload Multiple images", type=["png", "jpg", "jpeg"], accept_multiple_files=True)
-    
-    if uploaded_files is not None:
-        st.write(uploaded_files)  # Displays list of uploaded files
-        for file in uploaded_files:
-            st.write(file.name)
-            st.image(load_image(file), width=250)
-            save_uploaded_file(file)
-```
-- In the "Home" section, users can upload multiple image files. The app then displays each uploaded image and saves it to the `tempDir` folder.
-
-### 6. **About Section**
-
-```python
-else:
-    st.subheader("About App")
-```
-- The "About" section provides information about the app.
-
-## Contributing
-
-Feel free to contribute to this project by submitting a pull request or reporting any issues. Make sure to follow the standard guidelines for contribution.
+Ensure that your **connection string** is correctly configured in your Streamlit secrets to allow access to Azure.
 
 ## License
 
-This project is open-source and available under the [MIT License](LICENSE).
+This project is licensed under the MIT License.
